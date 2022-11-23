@@ -9,9 +9,10 @@ import SwiftUI
 
 @main
 struct fivelettersApp: App {
+    @State var g: String = "7"
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            StartGame(letter: $g)
         }
     }
 }
