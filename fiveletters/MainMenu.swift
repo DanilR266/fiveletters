@@ -7,7 +7,29 @@
 
 import SwiftUI
 
+
+struct AppContentView: View {
+    @EnvironmentObject var dm: Model
+    @State var signInSuccess = false
+    
+    var body: some View {
+        return Group {
+            if signInSuccess {
+                StartGame()
+                    .environmentObject(Model())
+            }
+            else {
+                MainMenu(signInSuccess: $signInSuccess)
+            }
+        }
+    }
+}
+
 struct MainMenu: View {
+    @EnvironmentObject var dm: Model
+    @State private var firstViewIsOn = false
+    @State private var tagSelection: String? = nil
+    @Binding var signInSuccess: Bool
     var body: some View {
         ZStack {
             CircleImage()
@@ -17,23 +39,23 @@ struct MainMenu: View {
                     .font(.system(size: 28))
                     .multilineTextAlignment(.center)
                 VStack(spacing: 58) {
-
-                    Button(action: {
-                            print("sign up bin tapped")
-                        }) {
-                            Text("Играть")
-                                .frame(minWidth: 0, maxWidth: .infinity)
-                                .font(.system(size: 28, weight: .bold, design: .default))
-                                .padding()
-                                .foregroundColor(.black)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 15)
-                                        .stroke(Color.black, lineWidth: 3)
-                            )
-                        }
-                        .background(Color.white) // If you have this
+                    Button {
+                        self.signInSuccess = true
+//                        dm.getword()
+                    } label: {
+                        Text("Играть")
+                            .frame(minWidth: 0, maxWidth: .infinity)
+                            .font(.system(size: 28, weight: .bold, design: .default))
+                            .padding()
+                            .foregroundColor(.black)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 15)
+                                    .stroke(Color.black, lineWidth: 3)
+                        )
+                    }.background(Color.white) // If you have this
                         .cornerRadius(15)
                         .frame(width: 252, height: 54, alignment: .center)
+                            
                     Button(action: {
                             print("sign up bin tapped2")
                         }) {
@@ -87,8 +109,32 @@ struct CircleImage: View {
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        MainMenu()
+
+struct StartGame: View {
+    var letter: String = ""
+    @EnvironmentObject var dm: Model
+    var body: some View {
+        ZStack {
+            VStack {
+                Text("Введите слово")
+                FIeldView()
+                Spacer()
+                Keyboard()
+                Spacer()
+            }
+            if dm.showingCredits {
+                withAnimation {
+                    GuessView(mainW: dm.mainWord, phrase: "Поздравляю, ты угадал слово")
+                        .environmentObject(Model())
+                }
+            }
+        }
     }
 }
+
+//struct ContentView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        MainMenu()
+//            .environmentObject(Model())
+//    }
+//}

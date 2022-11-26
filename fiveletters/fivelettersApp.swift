@@ -9,10 +9,11 @@ import SwiftUI
 
 @main
 struct fivelettersApp: App {
-    @State var g: String = "7"
+    @StateObject var dm = Model()
     var body: some Scene {
         WindowGroup {
-            StartGame(letter: $g)
+            AppContentView()
+                .environmentObject(Model())
         }
     }
 }

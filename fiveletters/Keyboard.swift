@@ -7,9 +7,8 @@
 
 import SwiftUI
 
-
-
 struct Keyboard: View {
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
             HStack(spacing: 6) {
@@ -48,6 +47,7 @@ struct Keyboard: View {
             }
             HStack {
                 HStack(spacing: 6) {
+                    ButtonOK(letter: "OK!")
                     ButtonOnKB(letter: "Я")
                     ButtonOnKB(letter: "Ч")
                     ButtonOnKB(letter: "С")
@@ -56,7 +56,7 @@ struct Keyboard: View {
                     ButtonOnKB(letter: "Т")
                     ButtonOnKB(letter: "Ь")
                     ButtonOnKB(letter: "Б")
-                    HStack(spacing: 35) {
+                    HStack(spacing: 6) {
                         ButtonOnKB(letter: "Ю")
                         ButtonOnCancel(letter: "Del")
                         
@@ -68,12 +68,15 @@ struct Keyboard: View {
 }
 
 struct ButtonOnKB:View {
-    @State var letter: String = "jn"
-    @State var letterNow: String = ""
+    @EnvironmentObject var dm: Model
+    
+    var letter: String = "jn"
     var body: some View {
         
         Button(action: {
-            
+            if dm.count < 29 && dm.canWrite{
+                dm.updateWord(letter: letter)
+            }
             }) {
                 Text(letter)
                     .frame(width: 27, height: 43, alignment: .center)
@@ -84,7 +87,7 @@ struct ButtonOnKB:View {
                             .stroke(Color.black, lineWidth: 2)
                 )
             }
-            .background(Color.white) // If you have this
+            .background(Color.white) 
             .cornerRadius(3)
             .frame(width: 25, height: 40, alignment: .center)
 
@@ -92,10 +95,13 @@ struct ButtonOnKB:View {
 }
 
 struct ButtonOnCancel: View {
+    @EnvironmentObject var dm: Model
     var letter: String = "Back"
     var body: some View {
         Button(action: {
-                print("sign up bin tapped2")
+//            dm.gridOne[dm.count].letter = " "
+            
+            dm.deleteLetter()
             }) {
                 Text(letter)
                     .frame(width: 42, height: 42, alignment: .center)
@@ -106,7 +112,30 @@ struct ButtonOnCancel: View {
                             .stroke(Color.black, lineWidth: 2)
                 )
             }
-            .background(Color.gray) // If you have this
+            .background(Color.gray)
+            .cornerRadius(3)
+            .frame(width: 42, height: 42, alignment: .center)
+
+    }
+}
+struct ButtonOK: View {
+    @EnvironmentObject var dm: Model
+    var letter: String = "OK!"
+    var body: some View {
+        Button(action: {
+            dm.canWrite = true
+            dm.checkWord()
+            }) {
+                Text(letter)
+                    .frame(width: 42, height: 42, alignment: .center)
+                    .font(.system(size: 18, weight: .light, design: .default))
+                    .foregroundColor(.black)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 3)
+                            .stroke(Color.black, lineWidth: 2)
+                )
+            }
+            .background(Color(.sRGB, red: 255/255, green: 234/255, blue: 45/255, opacity: 1))
             .cornerRadius(3)
             .frame(width: 42, height: 42, alignment: .center)
 

@@ -8,37 +8,25 @@
 import SwiftUI
 
 
-struct StartGame: View {
-    @Binding var letter: String
-    var body: some View {
-        ZStack {
-            VStack {
-                Text(letter)
-                Keyboard()
-            }
-        }
-    }
-}
 
 
-struct Field:View {
+
+struct Field: View {
+    @EnvironmentObject var dm: Model
     var letter: String
+    var color: Color = .white
     var body: some View {
-        Button(action: {
-                print("sign up bin tapped2")
-            }) {
-                Text(letter)
-                    .frame(width: 27, height: 43, alignment: .center)
+        Text(letter)
+                    .frame(width: 45, height: 54, alignment: .center)
                     .font(.system(size: 28, weight: .light, design: .default))
                     .foregroundColor(.black)
                     .overlay(
                         RoundedRectangle(cornerRadius: 3)
-                            .stroke(Color.yellow, lineWidth: 2)
+                            .stroke(Color(.sRGB, red: 255/255, green: 234/255, blue: 45/255, opacity: 1), lineWidth: 5)
                 )
-            }
-            .background(Color.white) // If you have this
+            .background(color)
             .cornerRadius(3)
-            .frame(width: 25, height: 40, alignment: .center)
+            .frame(width: 45, height: 54, alignment: .center)
 
     }
 }
@@ -47,5 +35,6 @@ struct Field:View {
 //struct StartGame_Previews: PreviewProvider {
 //    static var previews: some View {
 //        StartGame()
+//            .environmentObject(Model())
 //    }
 //}
